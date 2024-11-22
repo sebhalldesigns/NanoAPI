@@ -2,37 +2,50 @@
 #define NANOAPI_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
-typedef enum
-{
-    SCALAR_TYPE_BOOL8   = 0x0,
-    SCALAR_TYPE_UINT8   = 0x1,
-    SCALAR_TYPE_INT8    = 0x2,
-    SCALAR_TYPE_UINT16  = 0x3,
-    SCALAR_TYPE_INT16   = 0x4,
-    SCALAR_TYPE_UINT32  = 0x5,
-    SCALAR_TYPE_INT32   = 0x6,
-    SCALAR_TYPE_UINT64  = 0x7,
-    SCALAR_TYPE_INT64   = 0x8,
-    SCALAR_TYPE_FLOAT32 = 0x9,
-    SCALAR_TYPE_FLOAT64 = 0xA
-} nApiScalarType;
+typedef uintptr_t nType_ptr;
+typedef uintptr_t nParameter_ptr;
+typedef uintptr_t nMethod_ptr;
 
-
-
-typedef struct 
+typedef struct nParameter
 {
     const char* name;
-} nApiMethod;
+    nType_ptr type;
+} nParameter;
 
-typedef struct 
+typedef struct nMethod
 {
-    uintptr_t length; 
-    const void* data;
-} nApiBuffer;
+    const char* name;
+    
+    size_t parameterCount;
+    nParameter_ptr parameters;
 
-void NANOAPI_TX(nApiBuffer buffer);
-nApiBuffer NANOAPI_RX();
-void NANOAPI_CLK();
+    nType_ptr returnType;
+} nMethod;
+
+typedef struct nType
+{
+    const char* name;
+    
+    size_t parameterCount;
+    nParameter_ptr parameters;
+
+    size_t methodCount;
+    nMethod_ptr methods;
+
+    nType_ptr baseType;
+} nType;
+
+void NanoApi_Init();
+
+bool NanoApi_GetSystemType(const char* typeName, nType_ptr* outPtr);
+
+bool NanoApi_DeclareCustomType(const char* typeName, const char* baseTypeName, nType_ptr* outPtr);
+bool NanoApi_AddParameter(const char* targetName, const char* name, const char* typeName, nParameter_ptr* outPtr);
+
+bool NanoApi_DeclareInstance(const char* typeName, nType_ptr* outPtr);
+
+//bool NanoApi_AddMethod(nType_ptr targetType, const char* name, nType_ptr returnType, size_t parameterCount, nParameter_ptr parameters);
 
 #endif // NANOAPI_H

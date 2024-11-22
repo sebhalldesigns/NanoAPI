@@ -2,17 +2,39 @@
 
 #include <stdio.h>  
 
-void NANOAPI_TX(nApiBuffer buffer)
+const char* g_systemTypes[] = {
+    "NObject",
+};
+
+void NanoApi_Init()
 {
-    printf("NANOAPI_TX\n");
+    printf("NanoApi_Init\n");
 }
-nApiBuffer NANOAPI_RX()
+
+bool NanoApi_GetSystemType(const char* typeName, nType_ptr* outPtr)
 {
-    printf("NANOAPI_RX\n");
-    nApiBuffer buffer;
-    return buffer;
+    printf("NanoApi_GetSystemType: %s\n", typeName);
+    *outPtr = 69;
+    return true;
 }
-void NANOAPI_CLK()
+
+bool NanoApi_DeclareCustomType(const char* typeName, const char* baseTypeName, nType_ptr* outPtr)
 {
-    printf("NANOAPI_CLK\n");
+    printf("NanoApi_DeclareCustomType: %s: %s\n", typeName, baseTypeName);
+    *outPtr = 420;
+    return true;
+}
+
+bool NanoApi_AddParameter(const char* targetName, const char* name, const char* typeName, nParameter_ptr* outPtr)
+{
+    printf("NanoApi_AddParameter: %s: %s: %s\n", targetName, name, typeName);
+    *outPtr = 1337;
+    return true;
+}
+
+bool NanoApi_DeclareInstance(const char* typeName, nType_ptr* outPtr)
+{
+    printf("NanoApi_DeclareInstance: %s\n", typeName);
+    *outPtr = 666;
+    return true;
 }
